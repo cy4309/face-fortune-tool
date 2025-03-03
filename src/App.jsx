@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { router_path } from "@/routers";
 import LoadingIndicator from "@/components/LoadingIndicator";
-import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/app.css";
 import { ConfigProvider, theme } from "antd";
+import MainLayout from "@/layouts/MainLayout";
+import FormPage from "@/pages/FormPage";
 
 // const ProtectedRoute = ({ children }) => {
 //   const navigate = useNavigate();
@@ -23,6 +24,7 @@ import { ConfigProvider, theme } from "antd";
 // };
 
 const Home = lazy(() => import("@/pages/Home"));
+// const FormPage = lazy(() => import("@/pages/FormPage"));
 const Error = lazy(() => import("@/pages/Error"));
 
 const App = () => {
@@ -53,6 +55,7 @@ const App = () => {
                 </Suspense>
               }
             />
+            <Route path={router_path.form} element={<FormPage />} />
             <Route path={router_path.error} element={<Error />} />
           </Route>
         </Routes>
