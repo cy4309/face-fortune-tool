@@ -1,15 +1,15 @@
-// import cycLogo from "/cyc-logo.png";
-import { SunOutlined } from "@ant-design/icons";
 import BaseButton from "@/components/BaseButton";
-import { useDispatch } from "react-redux";
-import { toggleDarkMode } from "@/stores/features/styleSlice";
+// import { useDispatch } from "react-redux";
+// import { toggleDarkMode } from "@/stores/features/styleSlice";
 import { useNavigate } from "react-router-dom";
+// import { SunOutlined } from "@ant-design/icons";
+import { CaretLeftOutlined } from "@ant-design/icons";
 // import Login from "@/containers/Login";
 // import { showSwal } from "@/utils/notification";
 
 const Nav = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // const [isLoginOpen, setIsLoginOpen] = useState(false);
   // const isAuthenticated = localStorage.getItem("userName");
 
@@ -27,14 +27,20 @@ const Nav = () => {
 
   return (
     <nav className="container p-4 flex justify-between items-center">
-      <div
+      <BaseButton
         className="flex justify-center items-center cursor-pointer"
         onClick={() => navigate("/")}
       >
-        <img className="w-6 mr-2" src="/s.png" alt="Speed3D" />
+        <CaretLeftOutlined /> 回上頁
+      </BaseButton>
+      {/* <div
+        className="flex justify-center items-center cursor-pointer"
+        onClick={() => navigate("/")}
+      >
+        <img src="/s.png" alt="Spe3d" className="h-6 mr-2" />
         <h1>Face Fortune Tool</h1>
-      </div>
-      <div className="flex justify-center items-center">
+      </div> */}
+      {/* <div className="flex justify-center items-center">
         <p className="text-sm mr-4 flex items-center">V0.0.1</p>
         <BaseButton
           className="hover:bg-hoverGray"
@@ -42,7 +48,7 @@ const Nav = () => {
         >
           <SunOutlined />
         </BaseButton>
-        {/* <BaseButton
+        <BaseButton
           label={isAuthenticated ? "Log Out" : "Log In"}
           onClick={handleAuth}
           // className={`text-white bg-primaryGray hover:bg-black dark:bg-white dark:text-primaryGray`}
@@ -51,8 +57,8 @@ const Nav = () => {
               ? "hover:bg-hoverGray dark:bg-primaryGray dark:text-white hover:dark:bg-hoverGray"
               : "bg-primaryGray text-white hover:bg-hoverGray dark:bg-white dark:text-primaryGray hover:dark:bg-hoverGray"
           }`}
-        /> */}
-      </div>
+        />
+      </div> */}
 
       {/* <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} /> */}
     </nav>
