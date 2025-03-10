@@ -207,8 +207,6 @@ export const imagesData = Object.keys(images).map((key, index) => ({
   imageUrl: images[key],
 }));
 
-console.log(imagesData);
-
 // import * as femaleImages from "@/assets/images/female/*.png";
 // import * as maleImages from "@/assets/images/male/*.png";
 

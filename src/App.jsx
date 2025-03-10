@@ -1,12 +1,13 @@
 import { useEffect, Suspense, lazy } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { router_path } from "@/routers";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import "@/assets/styles/app.css";
 import { ConfigProvider, theme } from "antd";
 import MainLayout from "@/layouts/MainLayout";
-import FormPage from "@/pages/FormPage";
+import Login from "@/pages/Login";
+import { setDarkMode } from "@/stores/features/styleSlice";
 
 // const ProtectedRoute = ({ children }) => {
 //   const navigate = useNavigate();
@@ -24,11 +25,17 @@ import FormPage from "@/pages/FormPage";
 // };
 
 const Home = lazy(() => import("@/pages/Home"));
-// const FormPage = lazy(() => import("@/pages/FormPage"));
+// const Login = lazy(() => import("@/pages/Login"));
 const Error = lazy(() => import("@/pages/Error"));
 
 const App = () => {
+  const dispatch = useDispatch();
   const isDarkMode = useSelector((state) => state.style.isDarkMode);
+
+  useEffect(() => {
+    const darkMode = localStorage.getItem("darkMode") === "true";
+    dispatch(setDarkMode(darkMode));
+  }, [dispatch]);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -55,7 +62,7 @@ const App = () => {
                 </Suspense>
               }
             />
-            <Route path={router_path.form} element={<FormPage />} />
+            <Route path={router_path.login} element={<Login />} />
             <Route path={router_path.error} element={<Error />} />
           </Route>
         </Routes>

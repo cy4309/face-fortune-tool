@@ -11,8 +11,11 @@ export const styleSlice = createSlice({
     toggleDarkMode: (state) => {
       state.isDarkMode = !state.isDarkMode;
     },
+    setDarkMode(state, action) {
+      state.isDarkMode = action.payload;
+    },
   },
 });
 
-export const { toggleDarkMode } = styleSlice.actions;
+export const { toggleDarkMode, setDarkMode } = styleSlice.actions;
 export default styleSlice.reducer;

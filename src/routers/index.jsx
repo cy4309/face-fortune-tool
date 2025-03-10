@@ -1,6 +1,7 @@
 export const router_path = {
   index: "/",
   home: "/home",
-  form: "/form/:title",
+  login: "/login",
+  // form: "/form/:title",
   error: "*",
 };
