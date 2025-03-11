@@ -1,6 +1,6 @@
 import { useEffect, Suspense, lazy } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { router_path } from "@/routers";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import "@/assets/styles/app.css";
@@ -8,6 +8,7 @@ import { ConfigProvider, theme } from "antd";
 import MainLayout from "@/layouts/MainLayout";
 import Login from "@/pages/Login";
 import { setDarkMode } from "@/stores/features/styleSlice";
+import PropTypes from "prop-types";
 
 // const ProtectedRoute = ({ children }) => {
 //   const navigate = useNavigate();
@@ -27,6 +28,23 @@ import { setDarkMode } from "@/stores/features/styleSlice";
 const Home = lazy(() => import("@/pages/Home"));
 // const Login = lazy(() => import("@/pages/Login"));
 const Error = lazy(() => import("@/pages/Error"));
+
+const ProtectedRoute = ({ children }) => {
+  const navigate = useNavigate();
+  const isAuthenticated = localStorage.getItem("userName");
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate(router_path.login);
+    }
+  }, [isAuthenticated, navigate]);
+
+  return isAuthenticated ? children : null;
+};
+
+ProtectedRoute.propTypes = {
+  children: PropTypes.node,
+};
 
 const App = () => {
   const dispatch = useDispatch();
@@ -57,9 +75,11 @@ const App = () => {
             <Route
               path={router_path.index}
               element={
-                <Suspense fallback={<LoadingIndicator />}>
-                  <Home />
-                </Suspense>
+                <ProtectedRoute>
+                  <Suspense fallback={<LoadingIndicator />}>
+                    <Home />
+                  </Suspense>
+                </ProtectedRoute>
               }
             />
             <Route path={router_path.login} element={<Login />} />

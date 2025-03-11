@@ -21,6 +21,11 @@ const Nav = () => {
     localStorage.setItem("darkMode", !currentMode);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("userName");
+    navigate("/");
+  };
+
   // const handleAuth = () => {
   //   if (isAuthenticated) {
   //     // dispatch(logout());
@@ -39,9 +44,9 @@ const Nav = () => {
         {isHomePage && (
           <BaseButton
             className="flex justify-center items-center cursor-pointer"
-            onClick={() => navigate("/login")}
+            onClick={() => handleLogout()}
           >
-            <CaretLeftOutlined /> 回上頁
+            <CaretLeftOutlined /> 回上頁，並儲存進度
           </BaseButton>
         )}
       </div>

@@ -1,5 +1,4 @@
-import { useState } from "react";
-// import { getImagesUrl } from "@/services/formService";
+import { useState, useEffect } from "react";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import { imagesData } from "@/assets/data/imagesData";
 import { categorySets } from "@/assets/data/typesData";
@@ -7,44 +6,68 @@ import BaseButton from "@/components/BaseButton";
 import { Select } from "antd";
 import { showSwal } from "@/utils/notification";
 import { useNavigate } from "react-router-dom";
+import { getUserRecord, postUserRecord } from "@/services/formService";
 
 const Home = () => {
   // const [answers, setAnswers] = useState([]);
   const navigate = useNavigate();
   const { Option } = Select;
+  const [isLoading, setIsLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedValues, setSelectedValues] = useState({
     eyes: categorySets.eyes[0].title,
     eyebrows: categorySets.eyebrows[0].title,
     nose: categorySets.nose[0].title,
     chin: categorySets.chin[0].title,
-    face: categorySets.face[0].title,
+    faceMain: categorySets.faceMain[0].title,
+    faceSub: categorySets.faceSub[0].title,
   });
 
+  useEffect(() => {
+    getUserRecord().then((data) => {
+      console.log(data);
+      if (data.length > 0) {
+        setCurrentImageIndex(data[data.length - 1].imageId);
+      }
+      setIsLoading(false);
+    });
+  }, []);
+
   const handleNextImage = () => {
-    console.log("Selected values:", selectedValues); //準備把這個資料送到後端
+    // console.log("Selected values:", selectedValues);
     if (
       selectedValues.eyes === categorySets.eyes[0].title ||
       selectedValues.eyebrows === categorySets.eyebrows[0].title ||
       selectedValues.nose === categorySets.nose[0].title ||
       selectedValues.chin === categorySets.chin[0].title ||
-      selectedValues.face === categorySets.face[0].title
+      selectedValues.faceMain === categorySets.faceMain[0].title ||
+      selectedValues.faceSub === categorySets.faceSub[0].title
     ) {
       showSwal({ isSuccess: false, title: "Please select all options." });
       return;
     }
+    const userRecodeReq = {
+      ...selectedValues,
+      imageId: currentImageIndex + 1,
+      username: localStorage.getItem("userName"),
+    };
+    console.log(userRecodeReq);
+    postUserRecord(userRecodeReq).then((data) => {
+      console.log(data);
+    });
 
+    setSelectedValues({
+      eyes: categorySets.eyes[0].title,
+      eyebrows: categorySets.eyebrows[0].title,
+      nose: categorySets.nose[0].title,
+      chin: categorySets.chin[0].title,
+      faceMain: categorySets.faceMain[0].title,
+      faceSub: categorySets.faceSub[0].title,
+    });
     if (currentImageIndex === imagesData.length - 1) {
       showSwal({ isSuccess: true, title: "Congrats! Your score is 100." });
       navigate("/login");
     } else {
-      setSelectedValues({
-        eyes: categorySets.eyes[0].title,
-        eyebrows: categorySets.eyebrows[0].title,
-        nose: categorySets.nose[0].title,
-        chin: categorySets.chin[0].title,
-        face: categorySets.face[0].title,
-      });
       setCurrentImageIndex((prevIndex) => prevIndex + 1);
     }
   };
@@ -118,7 +141,7 @@ const Home = () => {
   //   });
   // };
 
-  if (imagesData.length === 0) {
+  if (isLoading) {
     return <LoadingIndicator />;
   }
   return (
@@ -140,7 +163,8 @@ const Home = () => {
         {renderSelect("eyebrows", categorySets.eyebrows[0])}
         {renderSelect("nose", categorySets.nose[0])}
         {renderSelect("chin", categorySets.chin[0])}
-        {renderSelect("face", categorySets.face[0])}
+        {renderSelect("faceMain", categorySets.faceMain[0])}
+        {renderSelect("faceSub", categorySets.faceSub[0])}
       </div>
 
       <div className="flex justify-center items-center p-4 space-x-4">
