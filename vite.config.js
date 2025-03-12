@@ -4,6 +4,7 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
+  base: "./", // 或 '/你的專案名稱/'（根據實際網址調整）
   server: {
     host: "0.0.0.0",
   },
