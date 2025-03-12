@@ -1,6 +1,6 @@
 import axios from "axios";
 const gasUrl =
-  "https://script.google.com/macros/s/AKfycbyg8AB7MEMZu2rP9vLuia9iM84LePchGP5cfMNhsc_FfIttCWpIXjVlWsX2zeJTN8sI/exec"; // v13
+  "https://script.google.com/macros/s/AKfycbwGhc2ZpsXepU-_fwuaockl37ikKexIaWgypxQ7lVzPC5uLEnUVhMpDjC6CRwk1YpJ5/exec"; // v14
 
 export const getUserRecord = async () => {
   return await axios

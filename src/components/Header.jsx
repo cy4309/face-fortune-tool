@@ -46,7 +46,7 @@ const Nav = () => {
             className="flex justify-center items-center cursor-pointer"
             onClick={() => handleLogout()}
           >
-            <CaretLeftOutlined /> 回上頁，並儲存進度
+            <CaretLeftOutlined /> 回主頁，並儲存進度
           </BaseButton>
         )}
       </div>

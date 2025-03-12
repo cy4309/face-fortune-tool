@@ -1,3 +1,5 @@
+// 這裡待做上一張資訊自動帶入的功能
+
 import { useState, useEffect } from "react";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import { imagesData } from "@/assets/data/imagesData";
@@ -14,70 +16,87 @@ const Home = () => {
   const { Option } = Select;
   const [isLoading, setIsLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [selectedValues, setSelectedValues] = useState({
+  console.log(currentImageIndex);
+  const [userRecords, setUserRecords] = useState([]);
+  console.log(userRecords);
+  const username = localStorage.getItem("userName");
+  const defaultValues = {
     eyes: categorySets.eyes[0].title,
     eyebrows: categorySets.eyebrows[0].title,
     nose: categorySets.nose[0].title,
     chin: categorySets.chin[0].title,
     faceMain: categorySets.faceMain[0].title,
     faceSub: categorySets.faceSub[0].title,
-  });
+  };
+  const [selectedValues, setSelectedValues] = useState(defaultValues);
 
   useEffect(() => {
-    const username = localStorage.getItem("userName");
     getUserRecord().then((data) => {
       console.log(data);
-      const userRecords = data.filter((record) => record.username === username);
-      if (userRecords.length > 0) {
-        setCurrentImageIndex(data[data.length - 1].imageId);
+      const userData = data.filter((record) => record.username === username);
+      setUserRecords(userData);
+
+      if (userData.length > 0) {
+        const lastRecord = userData[userData.length - 1];
+        console.log(lastRecord);
+        setCurrentImageIndex(lastRecord.imageId);
+        setSelectedValues({
+          eyes: lastRecord.eyes || defaultValues.eyes,
+          eyebrows: lastRecord.eyebrows || defaultValues.eyebrows,
+          nose: lastRecord.nose || defaultValues.nose,
+          chin: lastRecord.chin || defaultValues.chin,
+          faceMain: lastRecord.faceMain || defaultValues.faceMain,
+          faceSub: lastRecord.faceSub || defaultValues.faceSub,
+        });
       }
       setIsLoading(false);
     });
   }, []);
 
+  useEffect(() => {
+    updateSelectedValues(currentImageIndex);
+  }, [currentImageIndex, userRecords]);
+
   const handlePrevImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? imagesData.length - 1 : prevIndex - 1
-    );
+    if (currentImageIndex > 0) {
+      const newImageId = currentImageIndex;
+      console.log(newImageId);
+      setCurrentImageIndex(newImageId);
+      // updateSelectedValues(newImageId);
+    }
   };
 
   const handleNextImage = () => {
-    // console.log("Selected values:", selectedValues);
     if (
-      selectedValues.eyes === categorySets.eyes[0].title ||
-      selectedValues.eyebrows === categorySets.eyebrows[0].title ||
-      selectedValues.nose === categorySets.nose[0].title ||
-      selectedValues.chin === categorySets.chin[0].title ||
-      selectedValues.faceMain === categorySets.faceMain[0].title ||
-      selectedValues.faceSub === categorySets.faceSub[0].title
+      Object.values(selectedValues).some(
+        (value) => value === defaultValues.eyes
+      )
     ) {
       showSwal({ isSuccess: false, title: "Please select all options." });
       return;
     }
-    const userRecodeReq = {
-      ...selectedValues,
-      imageId: currentImageIndex + 1,
-      username: localStorage.getItem("userName"),
-    };
-    console.log(userRecodeReq);
-    postUserRecord(userRecodeReq).then((data) => {
-      console.log(data);
+
+    const newImageId = currentImageIndex + 1;
+    const userRecordReq = { ...selectedValues, imageId: newImageId, username };
+
+    postUserRecord(userRecordReq).then(() => {
+      setUserRecords((prevRecords) => [...prevRecords, userRecordReq]);
     });
 
-    setSelectedValues({
-      eyes: categorySets.eyes[0].title,
-      eyebrows: categorySets.eyebrows[0].title,
-      nose: categorySets.nose[0].title,
-      chin: categorySets.chin[0].title,
-      faceMain: categorySets.faceMain[0].title,
-      faceSub: categorySets.faceSub[0].title,
-    });
-    if (currentImageIndex === imagesData.length - 1) {
+    if (newImageId === imagesData.length) {
       showSwal({ isSuccess: true, title: "Congrats! Your score is 100." });
       navigate("/login");
     } else {
-      setCurrentImageIndex((prevIndex) => prevIndex + 1);
+      setCurrentImageIndex(newImageId);
+      // updateSelectedValues(newImageId);
     }
+  };
+
+  const updateSelectedValues = (imageId) => {
+    const foundRecord = userRecords.find(
+      (record) => record.imageId === imageId && record.username === username
+    );
+    setSelectedValues(foundRecord || defaultValues);
   };
 
   const handleSelectChange = (name, value) => {
