@@ -3,12 +3,12 @@ export const categorySets = {
     {
       title: "此眼睛最符合哪個敘述？",
       options: [
-        { title: "明眼", value: "eyesBig" },
-        { title: "秀眼", value: "eyesSmall" },
-        { title: "圓眼", value: "eyesRound" },
-        { title: "長眼", value: "eyesLong" },
-        { title: "眼眥尖", value: "innerCanthusCurved" },
-        { title: "眼眥圓", value: "innerCanthusRound" },
+        { title: "眼睛大", value: "eyesBig" },
+        { title: "眼睛小", value: "eyesSmall" },
+        { title: "眼睛圓", value: "eyesRound" },
+        { title: "眼睛長", value: "eyesLong" },
+        { title: "眼頭彎", value: "innerCanthusCurved" },
+        { title: "眼頭圓", value: "innerCanthusRound" },
         { title: "大小眼", value: "eyesUneven" },
       ],
     },
@@ -17,10 +17,10 @@ export const categorySets = {
     {
       title: "此眉毛最符合哪個敘述？",
       options: [
-        { title: "眉近", value: "browsClose" },
-        { title: "印堂開", value: "browsWide" },
-        { title: "眉高", value: "browsHigh" },
-        { title: "眉伏", value: "browsLow" },
+        { title: "眉毛太近", value: "browsClose" },
+        { title: "眉毛太遠", value: "browsWide" },
+        { title: "眉毛高", value: "browsHigh" },
+        { title: "眉毛低", value: "browsLow" },
       ],
     },
   ],
@@ -37,9 +37,9 @@ export const categorySets = {
     {
       title: "此下巴最符合哪個敘述？",
       options: [
-        { title: "地閣潤", value: "chinRound" },
-        { title: "地閣闊", value: "chinWide" },
-        { title: "地閣秀", value: "chinNarrow" },
+        { title: "下巴圓", value: "chinRound" },
+        { title: "下巴寬", value: "chinWide" },
+        { title: "下巴窄", value: "chinNarrow" },
       ],
     },
   ],
