@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { getUserRecord, postUserRecord } from "@/services/formService";
 
 const Home = () => {
-  // const [answers, setAnswers] = useState([]);
   const navigate = useNavigate();
   const { Option } = Select;
   const [isLoading, setIsLoading] = useState(true);
@@ -102,46 +101,6 @@ const Home = () => {
       ))}
     </Select>
   );
-
-  // useEffect(() => {
-  //   getImagesUrl().then((data) => {
-  //     console.log(data);
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   // 假設從 API 取得上次紀錄
-  //   fetch(`/getUserRecord/${title}`)
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         return response.json();
-  //       }
-  //       return [];
-  //     })
-  //     .then((data) => {
-  //       setAnswers(data);
-  //     });
-
-  //   // 假設從 API 取得問題列表
-  //   fetch(`/getQuestions/${title}`)
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         return response.json();
-  //       }
-  //       return [];
-  //     })
-  //     .then((data) => {
-  //       setQuestions(data);
-  //     });
-  // }, [title]);
-
-  // const handleSubmit = () => {
-  //   // 提交表單資料到 Google Apps Script
-  //   fetch(`/saveUserRecord/${title}`, {
-  //     method: "POST",
-  //     body: JSON.stringify(answers),
-  //   });
-  // };
 
   if (isLoading) {
     return <LoadingIndicator />;

@@ -8,6 +8,7 @@ export const showSwal = ({ isSuccess, title }) => {
     title: title,
     showConfirmButton: false,
     // showCloseButton: true,
+    // position: "top",
     timer: 2500,
   });
 };

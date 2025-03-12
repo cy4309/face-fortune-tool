@@ -6,7 +6,7 @@ const MainLayout = () => {
   return (
     <div className="w-full min-h-screen flex flex-col justify-center items-center bg-white text-black dark:bg-black dark:text-white">
       <Header />
-      <main className="w-full flex-grow flex flex-col items-center">
+      <main className="w-full max-w-[480px] flex-grow flex flex-col items-center">
         <Outlet />
       </main>
       <Footer />
