@@ -75,7 +75,10 @@ const Home = () => {
       faceSub: categorySets.faceSub[0].title,
     });
     if (currentImageIndex === imagesData.length - 1) {
-      showSwal({ isSuccess: true, title: "Congrats! Your score is 100." });
+      showSwal({
+        isSuccess: true,
+        title: `Congrats! Your score is ${imagesData.length}.`,
+      });
       navigate("/login");
     } else {
       setCurrentImageIndex((prevIndex) => prevIndex + 1);
