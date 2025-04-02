@@ -1,205 +1,205 @@
-import f1 from "@/assets/images/f1.jpg";
-import f2 from "@/assets/images/f2.jpg";
-import f3 from "@/assets/images/f3.jpeg";
-import f4 from "@/assets/images/f4.jpeg";
-import f5 from "@/assets/images/f5.jpg";
-import f6 from "@/assets/images/f6.jpg";
-import f7 from "@/assets/images/f7.png";
-import f8 from "@/assets/images/f8.jpg";
-import f9 from "@/assets/images/f9.png";
-import f10 from "@/assets/images/f10.png";
-import f11 from "@/assets/images/f11.jpg";
-import f12 from "@/assets/images/f12.jpg";
-import f13 from "@/assets/images/f13.png";
-import f14 from "@/assets/images/f14.png";
-import f15 from "@/assets/images/f15.png";
-import f16 from "@/assets/images/f16.png";
-import f17 from "@/assets/images/f17.png";
-import f18 from "@/assets/images/f18.png";
-import f19 from "@/assets/images/f19.png";
-import f20 from "@/assets/images/f20.png";
-import f21 from "@/assets/images/f21.png";
-import f22 from "@/assets/images/f22.png";
-import f23 from "@/assets/images/f23.png";
-import f24 from "@/assets/images/f24.png";
-import f25 from "@/assets/images/f25.png";
-import f26 from "@/assets/images/f26.png";
-import f27 from "@/assets/images/f27.png";
-import f28 from "@/assets/images/f28.png";
-import f29 from "@/assets/images/f29.png";
-import f30 from "@/assets/images/f30.png";
-import f31 from "@/assets/images/f31.png";
-import f32 from "@/assets/images/f32.png";
-import f33 from "@/assets/images/f33.png";
-import f34 from "@/assets/images/f34.png";
-import f35 from "@/assets/images/f35.png";
-import f36 from "@/assets/images/f36.png";
-import f37 from "@/assets/images/f37.png";
-import f38 from "@/assets/images/f38.png";
-import f39 from "@/assets/images/f39.png";
-import f40 from "@/assets/images/f40.png";
-import f41 from "@/assets/images/f41.png";
-import f42 from "@/assets/images/f42.png";
-import f43 from "@/assets/images/f43.png";
-import f44 from "@/assets/images/f44.png";
-import f45 from "@/assets/images/f45.png";
-import f46 from "@/assets/images/f46.png";
-import f47 from "@/assets/images/f47.png";
-import f48 from "@/assets/images/f48.png";
-import f49 from "@/assets/images/f49.png";
-import f50 from "@/assets/images/f50.png";
-import m51 from "@/assets/images/m51.png";
-import m52 from "@/assets/images/m52.png";
-import m53 from "@/assets/images/m53.png";
-import m54 from "@/assets/images/m54.png";
-import m55 from "@/assets/images/m55.png";
-import m56 from "@/assets/images/m56.png";
-import m57 from "@/assets/images/m57.png";
-import m58 from "@/assets/images/m58.png";
-import m59 from "@/assets/images/m59.png";
-import m60 from "@/assets/images/m60.png";
-import m61 from "@/assets/images/m61.png";
-import m62 from "@/assets/images/m62.png";
-import m63 from "@/assets/images/m63.png";
-import m64 from "@/assets/images/m64.png";
-import m65 from "@/assets/images/m65.png";
-import m66 from "@/assets/images/m66.png";
-import m67 from "@/assets/images/m67.png";
-import m68 from "@/assets/images/m68.png";
-import m69 from "@/assets/images/m69.png";
-import m70 from "@/assets/images/m70.png";
-import m71 from "@/assets/images/m71.png";
-import m72 from "@/assets/images/m72.png";
-import m73 from "@/assets/images/m73.png";
-import m74 from "@/assets/images/m74.png";
-import m75 from "@/assets/images/m75.png";
-import m76 from "@/assets/images/m76.png";
-import m77 from "@/assets/images/m77.png";
-import m78 from "@/assets/images/m78.png";
-import m79 from "@/assets/images/m79.png";
-import m80 from "@/assets/images/m80.png";
-import m81 from "@/assets/images/m81.png";
-import m82 from "@/assets/images/m82.png";
-import m83 from "@/assets/images/m83.png";
-import m84 from "@/assets/images/m84.png";
-import m85 from "@/assets/images/m85.png";
-import m86 from "@/assets/images/m86.png";
-import m87 from "@/assets/images/m87.png";
-import m88 from "@/assets/images/m88.png";
-import m89 from "@/assets/images/m89.png";
-import m90 from "@/assets/images/m90.png";
-import m91 from "@/assets/images/m91.png";
-import m92 from "@/assets/images/m92.png";
-import m93 from "@/assets/images/m93.png";
-import m94 from "@/assets/images/m94.png";
-import m95 from "@/assets/images/m95.png";
-import m96 from "@/assets/images/m96.png";
-import m97 from "@/assets/images/m97.png";
-import m98 from "@/assets/images/m98.png";
-import m99 from "@/assets/images/m99.png";
-import m100 from "@/assets/images/m100.png";
+import n1 from "@/assets/images/Photo_1.jpg";
+import n2 from "@/assets/images/Photo_2.jpg";
+import n3 from "@/assets/images/Photo_3.jpg";
+import n4 from "@/assets/images/Photo_4.jpg";
+import n5 from "@/assets/images/Photo_5.jpg";
+import n6 from "@/assets/images/Photo_6.jpg";
+import n7 from "@/assets/images/Photo_7.jpg";
+import n8 from "@/assets/images/Photo_8.jpg";
+import n9 from "@/assets/images/Photo_9.jpg";
+import n10 from "@/assets/images/Photo_10.jpg";
+import n11 from "@/assets/images/Photo_11.jpg";
+import n12 from "@/assets/images/Photo_12.jpg";
+import n13 from "@/assets/images/Photo_13.jpg";
+import n14 from "@/assets/images/Photo_14.jpg";
+import n15 from "@/assets/images/Photo_15.jpg";
+import n16 from "@/assets/images/Photo_16.jpg";
+import n17 from "@/assets/images/Photo_17.jpg";
+import n18 from "@/assets/images/Photo_18.jpg";
+import n19 from "@/assets/images/Photo_19.jpg";
+import n20 from "@/assets/images/Photo_20.jpg";
+import n21 from "@/assets/images/Photo_21.jpg";
+import n22 from "@/assets/images/Photo_22.jpg";
+import n23 from "@/assets/images/Photo_23.jpg";
+import n24 from "@/assets/images/Photo_24.jpg";
+import n25 from "@/assets/images/Photo_25.jpg";
+import n26 from "@/assets/images/Photo_26.jpg";
+import n27 from "@/assets/images/Photo_27.jpg";
+import n28 from "@/assets/images/Photo_28.jpg";
+import n29 from "@/assets/images/Photo_29.jpg";
+import n30 from "@/assets/images/Photo_30.jpg";
+import n31 from "@/assets/images/Photo_31.jpg";
+import n32 from "@/assets/images/Photo_32.jpg";
+import n33 from "@/assets/images/Photo_33.jpg";
+import n34 from "@/assets/images/Photo_34.jpg";
+import n35 from "@/assets/images/Photo_35.jpg";
+import n36 from "@/assets/images/Photo_36.jpg";
+import n37 from "@/assets/images/Photo_37.jpg";
+import n38 from "@/assets/images/Photo_38.jpg";
+import n39 from "@/assets/images/Photo_39.jpg";
+import n40 from "@/assets/images/Photo_40.jpg";
+import n41 from "@/assets/images/Photo_41.jpg";
+import n42 from "@/assets/images/Photo_42.jpg";
+import n43 from "@/assets/images/Photo_43.jpg";
+import n44 from "@/assets/images/Photo_44.jpg";
+import n45 from "@/assets/images/Photo_45.jpg";
+import n46 from "@/assets/images/Photo_46.jpg";
+import n47 from "@/assets/images/Photo_47.jpg";
+import n48 from "@/assets/images/Photo_48.jpg";
+import n49 from "@/assets/images/Photo_49.jpg";
+import n50 from "@/assets/images/Photo_50.jpg";
+import n51 from "@/assets/images/Photo_51.jpg";
+import n52 from "@/assets/images/Photo_52.jpg";
+import n53 from "@/assets/images/Photo_53.jpg";
+import n54 from "@/assets/images/Photo_54.jpg";
+import n55 from "@/assets/images/Photo_55.jpg";
+import n56 from "@/assets/images/Photo_56.jpg";
+import n57 from "@/assets/images/Photo_57.jpg";
+import n58 from "@/assets/images/Photo_58.jpg";
+import n59 from "@/assets/images/Photo_59.jpg";
+import n60 from "@/assets/images/Photo_60.jpg";
+import n61 from "@/assets/images/Photo_61.jpg";
+import n62 from "@/assets/images/Photo_62.jpg";
+import n63 from "@/assets/images/Photo_63.jpg";
+import n64 from "@/assets/images/Photo_64.jpg";
+import n65 from "@/assets/images/Photo_65.jpg";
+import n66 from "@/assets/images/Photo_66.jpg";
+import n67 from "@/assets/images/Photo_67.jpg";
+import n68 from "@/assets/images/Photo_68.jpg";
+import n69 from "@/assets/images/Photo_69.jpg";
+import n70 from "@/assets/images/Photo_70.jpg";
+import n71 from "@/assets/images/Photo_71.jpg";
+import n72 from "@/assets/images/Photo_72.jpg";
+import n73 from "@/assets/images/Photo_73.jpg";
+import n74 from "@/assets/images/Photo_74.jpg";
+import n75 from "@/assets/images/Photo_75.jpg";
+import n76 from "@/assets/images/Photo_76.jpg";
+import n77 from "@/assets/images/Photo_77.jpg";
+import n78 from "@/assets/images/Photo_78.jpg";
+import n79 from "@/assets/images/Photo_79.jpg";
+import n80 from "@/assets/images/Photo_80.jpg";
+import n81 from "@/assets/images/Photo_81.jpg";
+import n82 from "@/assets/images/Photo_82.jpg";
+import n83 from "@/assets/images/Photo_83.jpg";
+import n84 from "@/assets/images/Photo_84.jpg";
+import n85 from "@/assets/images/Photo_85.jpg";
+import n86 from "@/assets/images/Photo_86.jpg";
+import n87 from "@/assets/images/Photo_87.jpg";
+import n88 from "@/assets/images/Photo_88.jpg";
+import n89 from "@/assets/images/Photo_89.jpg";
+import n90 from "@/assets/images/Photo_90.jpg";
+import n91 from "@/assets/images/Photo_91.jpg";
+import n92 from "@/assets/images/Photo_92.jpg";
+import n93 from "@/assets/images/Photo_93.jpg";
+import n94 from "@/assets/images/Photo_94.jpg";
+import n95 from "@/assets/images/Photo_95.jpg";
+import n96 from "@/assets/images/Photo_96.jpg";
+import n97 from "@/assets/images/Photo_97.jpg";
+import n98 from "@/assets/images/Photo_98.jpg";
+import n99 from "@/assets/images/Photo_99.jpg";
+import n100 from "@/assets/images/Photo_100.jpg";
 
 const images = {
-  f1,
-  f2,
-  f3,
-  f4,
-  f5,
-  f6,
-  f7,
-  f8,
-  f9,
-  f10,
-  f11,
-  f12,
-  f13,
-  f14,
-  f15,
-  f16,
-  f17,
-  f18,
-  f19,
-  f20,
-  f21,
-  f22,
-  f23,
-  f24,
-  f25,
-  f26,
-  f27,
-  f28,
-  f29,
-  f30,
-  f31,
-  f32,
-  f33,
-  f34,
-  f35,
-  f36,
-  f37,
-  f38,
-  f39,
-  f40,
-  f41,
-  f42,
-  f43,
-  f44,
-  f45,
-  f46,
-  f47,
-  f48,
-  f49,
-  f50,
-  m51,
-  m52,
-  m53,
-  m54,
-  m55,
-  m56,
-  m57,
-  m58,
-  m59,
-  m60,
-  m61,
-  m62,
-  m63,
-  m64,
-  m65,
-  m66,
-  m67,
-  m68,
-  m69,
-  m70,
-  m71,
-  m72,
-  m73,
-  m74,
-  m75,
-  m76,
-  m77,
-  m78,
-  m79,
-  m80,
-  m81,
-  m82,
-  m83,
-  m84,
-  m85,
-  m86,
-  m87,
-  m88,
-  m89,
-  m90,
-  m91,
-  m92,
-  m93,
-  m94,
-  m95,
-  m96,
-  m97,
-  m98,
-  m99,
-  m100,
+  n1,
+  n2,
+  n3,
+  n4,
+  n5,
+  n6,
+  n7,
+  n8,
+  n9,
+  n10,
+  n11,
+  n12,
+  n13,
+  n14,
+  n15,
+  n16,
+  n17,
+  n18,
+  n19,
+  n20,
+  n21,
+  n22,
+  n23,
+  n24,
+  n25,
+  n26,
+  n27,
+  n28,
+  n29,
+  n30,
+  n31,
+  n32,
+  n33,
+  n34,
+  n35,
+  n36,
+  n37,
+  n38,
+  n39,
+  n40,
+  n41,
+  n42,
+  n43,
+  n44,
+  n45,
+  n46,
+  n47,
+  n48,
+  n49,
+  n50,
+  n51,
+  n52,
+  n53,
+  n54,
+  n55,
+  n56,
+  n57,
+  n58,
+  n59,
+  n60,
+  n61,
+  n62,
+  n63,
+  n64,
+  n65,
+  n66,
+  n67,
+  n68,
+  n69,
+  n70,
+  n71,
+  n72,
+  n73,
+  n74,
+  n75,
+  n76,
+  n77,
+  n78,
+  n79,
+  n80,
+  n81,
+  n82,
+  n83,
+  n84,
+  n85,
+  n86,
+  n87,
+  n88,
+  n89,
+  n90,
+  n91,
+  n92,
+  n93,
+  n94,
+  n95,
+  n96,
+  n97,
+  n98,
+  n99,
+  n100,
 };
 
 export const imagesData = Object.keys(images).map((key, index) => ({
@@ -207,8 +207,8 @@ export const imagesData = Object.keys(images).map((key, index) => ({
   imageUrl: images[key],
 }));
 
-// import * as femaleImages from "@/assets/images/female/*.png";
-// import * as maleImages from "@/assets/images/male/*.png";
+// import * as femaleImages from "@/assets/images/female/*.jpg";
+// import * as maleImages from "@/assets/images/male/*.jpg";
 
 // const images = [
 //   ...Object.values(femaleImages).map((src, i) => ({ id: i + 1, src })),

@@ -14,9 +14,10 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedValues, setSelectedValues] = useState({
-    eyes: categorySets.eyes[0].title,
     eyebrows: categorySets.eyebrows[0].title,
+    eyes: categorySets.eyes[0].title,
     nose: categorySets.nose[0].title,
+    mouth: categorySets.mouth[0].title,
     chin: categorySets.chin[0].title,
     faceMain: categorySets.faceMain[0].title,
     faceSub: categorySets.faceSub[0].title,
@@ -43,9 +44,10 @@ const Home = () => {
   const handleNextImage = () => {
     // console.log("Selected values:", selectedValues);
     if (
-      selectedValues.eyes === categorySets.eyes[0].title ||
       selectedValues.eyebrows === categorySets.eyebrows[0].title ||
+      selectedValues.eyes === categorySets.eyes[0].title ||
       selectedValues.nose === categorySets.nose[0].title ||
+      selectedValues.mouth === categorySets.mouth[0].title ||
       selectedValues.chin === categorySets.chin[0].title ||
       selectedValues.faceMain === categorySets.faceMain[0].title ||
       selectedValues.faceSub === categorySets.faceSub[0].title
@@ -64,9 +66,10 @@ const Home = () => {
     });
 
     setSelectedValues({
-      eyes: categorySets.eyes[0].title,
       eyebrows: categorySets.eyebrows[0].title,
+      eyes: categorySets.eyes[0].title,
       nose: categorySets.nose[0].title,
+      mouth: categorySets.mouth[0].title,
       chin: categorySets.chin[0].title,
       faceMain: categorySets.faceMain[0].title,
       faceSub: categorySets.faceSub[0].title,
@@ -120,9 +123,10 @@ const Home = () => {
       </div>
 
       <div className="w-full flex flex-col justify-center items-center space-y-4 text-center">
-        {renderSelect("eyes", categorySets.eyes[0])}
         {renderSelect("eyebrows", categorySets.eyebrows[0])}
+        {renderSelect("eyes", categorySets.eyes[0])}
         {renderSelect("nose", categorySets.nose[0])}
+        {renderSelect("mouth", categorySets.mouth[0])}
         {renderSelect("chin", categorySets.chin[0])}
         {renderSelect("faceMain", categorySets.faceMain[0])}
         {renderSelect("faceSub", categorySets.faceSub[0])}
