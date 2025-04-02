@@ -1,10 +1,4 @@
-# React + Vite + BS4 + SCSS + Three.js + GSAP ...
-
-# Using Redux, TypeScript
-
-# nvm use 16
-
-# npm run dev
+# Face-fortune-tool
 
 Currently, two official plugins are available:
 
