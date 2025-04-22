@@ -23,6 +23,26 @@ const Home = () => {
     faceSub: categorySets.faceSub[0].title,
   });
 
+  // useEffect(() => {
+  //   if (currentImageIndex > imagesData.length) {
+  //     showSwal({
+  //       isSuccess: true,
+  //       title: "您已完成！",
+  //     });
+  //     setIsLoading(false);
+  //     return;
+  //   }
+  //   const username = localStorage.getItem("userName");
+  //   getUserRecord().then((data) => {
+  //     console.log(data);
+  //     const userRecords = data.filter((record) => record.username === username);
+  //     if (userRecords.length > 0) {
+  //       setCurrentImageIndex(data[data.length - 1].imageId);
+  //     }
+  //     setIsLoading(false);
+  //   });
+  // }, []);
+
   useEffect(() => {
     const username = localStorage.getItem("userName");
     getUserRecord().then((data) => {
@@ -30,6 +50,17 @@ const Home = () => {
       const userRecords = data.filter((record) => record.username === username);
       if (userRecords.length > 0) {
         setCurrentImageIndex(data[data.length - 1].imageId);
+
+        // 加上全部完成的判斷
+        if (data[data.length - 1].imageId === imagesData.length) {
+          showSwal({
+            isSuccess: true,
+            title: `Your score is ${data[data.length - 1].imageId} / ${
+              imagesData.length
+            }！`,
+          });
+          navigate("/login");
+        }
       }
       setIsLoading(false);
     });
