@@ -67,9 +67,29 @@ const Home = () => {
   }, []);
 
   const handlePrevImage = () => {
+    setIsLoading(true);
     setCurrentImageIndex((prevIndex) =>
       prevIndex === 0 ? imagesData.length - 1 : prevIndex - 1
     );
+
+    const username = localStorage.getItem("userName");
+    getUserRecord().then((data) => {
+      console.log(data);
+      const userRecords = data.filter((record) => record.username === username);
+      if (userRecords.length > 0) {
+        const lastRecord = userRecords[userRecords.length - 1];
+        setSelectedValues({
+          eyebrows: lastRecord.eyebrows,
+          eyes: lastRecord.eyes,
+          nose: lastRecord.nose,
+          mouth: lastRecord.mouth,
+          chin: lastRecord.chin,
+          faceMain: lastRecord.faceMain,
+          faceSub: lastRecord.faceSub,
+        });
+      }
+      setIsLoading(false);
+    });
   };
 
   const handleNextImage = () => {
