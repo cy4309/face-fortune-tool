@@ -7,12 +7,15 @@ import { Select } from "antd";
 import { showSwal } from "@/utils/notification";
 import { useNavigate } from "react-router-dom";
 import { getUserRecord, postUserRecord } from "@/services/formService";
+import { data } from "@/assets/data/data-20250520";
 
 const Home = () => {
   const navigate = useNavigate();
   const { Option } = Select;
   const [isLoading, setIsLoading] = useState(true);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentImageId, setCurrentImageId] = useState(0);
+  console.log(`currentImageId: ${currentImageId}`);
+  // const [currentShowId, setCurrentShowId] = useState(0);
   const [selectedValues, setSelectedValues] = useState({
     eyebrows: categorySets.eyebrows[0].title,
     eyes: categorySets.eyes[0].title,
@@ -22,6 +25,10 @@ const Home = () => {
     faceMain: categorySets.faceMain[0].title,
     faceSub: categorySets.faceSub[0].title,
   });
+
+  useEffect(() => {
+    console.log(data);
+  }, []);
 
   // useEffect(() => {
   //   if (currentImageIndex > imagesData.length) {
@@ -49,15 +56,21 @@ const Home = () => {
       console.log(data);
       const userRecords = data.filter((record) => record.username === username);
       if (userRecords.length > 0) {
-        setCurrentImageIndex(data[data.length - 1].imageId);
+        // setCurrentImageId(data[data.length - 1].imageId);
+        const maxImageId = Math.max(
+          ...userRecords.map((record) => record.sequenceId)
+        );
+        setCurrentImageId(maxImageId);
 
         // 加上全部完成的判斷
-        if (data[data.length - 1].imageId === imagesData.length) {
+        // if (data[data.length - 1].imageId === imagesData.length) {
+        if (maxImageId === imagesData.length) {
           showSwal({
             isSuccess: true,
-            title: `Your score is ${data[data.length - 1].imageId} / ${
-              imagesData.length
-            }！`,
+            title: `Congrats! You have done all the tests!`,
+            // title: `Your score is ${data[data.length - 1].imageId} / ${
+            //   imagesData.length
+            // }！`,
           });
           navigate("/login");
         }
@@ -68,7 +81,7 @@ const Home = () => {
 
   const handlePrevImage = () => {
     setIsLoading(true);
-    setCurrentImageIndex((prevIndex) =>
+    setCurrentImageId((prevIndex) =>
       prevIndex === 0 ? imagesData.length - 1 : prevIndex - 1
     );
 
@@ -108,7 +121,8 @@ const Home = () => {
     }
     const userRecodeReq = {
       ...selectedValues,
-      imageId: currentImageIndex + 1,
+      sequenceId: imagesData[currentImageId].sequenceId,
+      imageId: imagesData[currentImageId].imageId,
       username: localStorage.getItem("userName"),
     };
     console.log(userRecodeReq);
@@ -125,14 +139,14 @@ const Home = () => {
       faceMain: categorySets.faceMain[0].title,
       faceSub: categorySets.faceSub[0].title,
     });
-    if (currentImageIndex === imagesData.length - 1) {
+    if (currentImageId === imagesData.length - 1) {
       showSwal({
         isSuccess: true,
         title: `Congrats! Your score is ${imagesData.length}.`,
       });
       navigate("/login");
     } else {
-      setCurrentImageIndex((prevIndex) => prevIndex + 1);
+      setCurrentImageId((prevIndex) => prevIndex + 1);
     }
   };
 
@@ -165,13 +179,13 @@ const Home = () => {
   return (
     <>
       <h2 className="w-[300px] flex justify-end">
-        {imagesData[currentImageIndex].id} / {imagesData.length}
+        {imagesData[currentImageId].sequenceId} / {imagesData.length}
       </h2>
       <div className="pb-4 w-[300px] h-[300px] overflow-hidden flex justify-center items-center">
         <img
           className="w-full h-full object-cover rounded-xl"
-          key={imagesData[currentImageIndex].id}
-          src={imagesData[currentImageIndex].imageUrl}
+          key={imagesData[currentImageId].sequenceId}
+          src={imagesData[currentImageId].imageUrl}
           alt="image"
         />
       </div>
@@ -190,11 +204,11 @@ const Home = () => {
         <BaseButton
           label="上一張"
           onClick={handlePrevImage}
-          disabled={currentImageIndex === 0}
+          disabled={currentImageId === 0}
         />
         <BaseButton
           label={`${
-            currentImageIndex === imagesData.length - 1 ? "完成" : "下一張"
+            currentImageId === imagesData.length - 1 ? "完成" : "下一張"
           }`}
           onClick={handleNextImage}
           // className="bg-primary"

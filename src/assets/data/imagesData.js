@@ -8,9 +8,11 @@ export const imagesData = Object.keys(images)
     return numA - numB;
   })
   .map((key, index) => {
-    // console.log(key, index);
+    console.log(key, index);
     return {
-      id: index + 1,
-      imageUrl: images[key].default, //這裡要用 `.default` 才會得到圖片的 `src`
+      imageId: parseInt(key.match(/(\d+)\.jpg$/)[1], 10),
+      imageUrl: key,
+      sequenceId: index + 1,
+      // imageUrl: images[key].default, //這裡要用 `.default` 才會得到圖片的 `src`
     };
   });
