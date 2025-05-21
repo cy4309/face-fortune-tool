@@ -4,14 +4,15 @@ import { imagesData } from "@/assets/data/imagesData";
 import { categorySets } from "@/assets/data/typesData";
 import BaseButton from "@/components/BaseButton";
 import { Select } from "antd";
+import { CaretRightOutlined } from "@ant-design/icons";
 import { showSwal } from "@/utils/notification";
 import { useNavigate } from "react-router-dom";
 import { getUserRecord, postUserRecord } from "@/services/formService";
-import { data } from "@/assets/data/data-20250520";
 
 const Home = () => {
   const navigate = useNavigate();
   const { Option } = Select;
+  const [showMain, setShowMain] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentImageId, setCurrentImageId] = useState(0);
   console.log(`currentImageId: ${currentImageId}`);
@@ -25,10 +26,6 @@ const Home = () => {
     faceMain: categorySets.faceMain[0].title,
     faceSub: categorySets.faceSub[0].title,
   });
-
-  useEffect(() => {
-    console.log(data);
-  }, []);
 
   // useEffect(() => {
   //   if (currentImageIndex > imagesData.length) {
@@ -176,6 +173,22 @@ const Home = () => {
   if (isLoading) {
     return <LoadingIndicator />;
   }
+
+  if (!showMain) {
+    return (
+      <div className="w-full h-full space-y-6 mt-6 flex flex-col items-center justify-center">
+        <BaseButton onClick={() => setShowMain(true)}>
+          開始測驗
+          <CaretRightOutlined />
+        </BaseButton>
+        <BaseButton onClick={() => navigate("/results")}>
+          看AI結果
+          <CaretRightOutlined />
+        </BaseButton>
+      </div>
+    );
+  }
+
   return (
     <>
       <h2 className="w-[300px] flex justify-end">

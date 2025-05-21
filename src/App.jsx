@@ -26,7 +26,7 @@ import PropTypes from "prop-types";
 // };
 
 const Home = lazy(() => import("@/pages/Home"));
-// const Login = lazy(() => import("@/pages/Login"));
+const Results = lazy(() => import("@/pages/Results"));
 const Error = lazy(() => import("@/pages/Error"));
 
 const ProtectedRoute = ({ children }) => {
@@ -78,6 +78,16 @@ const App = () => {
                 <ProtectedRoute>
                   <Suspense fallback={<LoadingIndicator />}>
                     <Home />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={router_path.results}
+              element={
+                <ProtectedRoute>
+                  <Suspense fallback={<LoadingIndicator />}>
+                    <Results />
                   </Suspense>
                 </ProtectedRoute>
               }

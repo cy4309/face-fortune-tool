@@ -10,6 +10,12 @@ export const showSwal = ({ isSuccess, title }) => {
     // showCloseButton: true,
     // position: "top",
     timer: 2500,
+    background: "transparent",
+    color: "#fff",
+    willOpen: (popup) => {
+      popup.style.border = "1px solid white";
+      popup.style.borderRadius = "8px";
+    },
   });
 };
 

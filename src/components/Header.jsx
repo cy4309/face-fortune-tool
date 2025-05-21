@@ -12,6 +12,7 @@ const Nav = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+  const isResultsPage = location.pathname === "/results";
   // const [isLoginOpen, setIsLoginOpen] = useState(false);
   // const isAuthenticated = localStorage.getItem("userName");
 
@@ -41,7 +42,7 @@ const Nav = () => {
   return (
     <nav className="container p-4 z-10 flex justify-between items-center">
       <div>
-        {isHomePage && (
+        {(isHomePage || isResultsPage) && (
           <BaseButton
             className="flex justify-center items-center cursor-pointer"
             onClick={() => handleLogout()}
@@ -58,7 +59,7 @@ const Nav = () => {
         <h1>Face Fortune Tool</h1>
       </div> */}
       <div className="flex justify-center items-center">
-        <p className="text-sm mr-4 flex items-center">V0.0.2</p>
+        <p className="text-sm mr-4 flex items-center">V0.1.1</p>
         <BaseButton
           className="h-10 cursor-pointer hover:bg-hoverGray"
           // onClick={() => dispatch(toggleDarkMode())}
