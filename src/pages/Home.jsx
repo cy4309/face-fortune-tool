@@ -54,14 +54,15 @@ const Home = () => {
       const userRecords = data.filter((record) => record.username === username);
       if (userRecords.length > 0) {
         // setCurrentImageId(data[data.length - 1].imageId);
-        const maxImageId = Math.max(
-          ...userRecords.map((record) => record.sequenceId)
+        // 取得所有不同的 imageId
+        const uniqueImageIds = Array.from(
+          new Set(userRecords.map((record) => record.imageId))
         );
-        setCurrentImageId(maxImageId);
+        setCurrentImageId(uniqueImageIds.length);
 
         // 加上全部完成的判斷
         // if (data[data.length - 1].imageId === imagesData.length) {
-        if (maxImageId === imagesData.length) {
+        if (uniqueImageIds === imagesData.length) {
           showSwal({
             isSuccess: true,
             title: `Congrats! You have done all the tests!`,
@@ -86,8 +87,18 @@ const Home = () => {
     getUserRecord().then((data) => {
       console.log(data);
       const userRecords = data.filter((record) => record.username === username);
-      if (userRecords.length > 0) {
-        const lastRecord = userRecords[userRecords.length - 1];
+
+      // 取得目前 currentImageId（已經 setCurrentImageId，但這裡還是舊值，所以要自己算）
+      const prevId =
+        currentImageId === 0 ? imagesData.length - 1 : currentImageId - 1;
+
+      // 過濾出該 currentImageId 的所有紀錄
+      const recordsForImage = userRecords.filter(
+        (record) => record.imageId === imagesData[prevId].imageId
+      );
+
+      if (recordsForImage.length > 0) {
+        const lastRecord = recordsForImage[recordsForImage.length - 1];
         setSelectedValues({
           eyebrows: lastRecord.eyebrows,
           eyes: lastRecord.eyes,
@@ -102,7 +113,9 @@ const Home = () => {
     });
   };
 
-  const handleNextImage = () => {
+  const handleNextImage = async () => {
+    setIsLoading(true);
+
     // console.log("Selected values:", selectedValues);
     if (
       selectedValues.eyebrows === categorySets.eyebrows[0].title ||
@@ -118,32 +131,69 @@ const Home = () => {
     }
     const userRecodeReq = {
       ...selectedValues,
-      sequenceId: imagesData[currentImageId].sequenceId,
       imageId: imagesData[currentImageId].imageId,
       username: localStorage.getItem("userName"),
     };
     console.log(userRecodeReq);
-    postUserRecord(userRecodeReq).then((data) => {
-      console.log(data);
-    });
+    await postUserRecord(userRecodeReq);
+    // postUserRecord(userRecodeReq).then((data) => {
+    //   console.log(data);
+    // });
 
-    setSelectedValues({
-      eyebrows: categorySets.eyebrows[0].title,
-      eyes: categorySets.eyes[0].title,
-      nose: categorySets.nose[0].title,
-      mouth: categorySets.mouth[0].title,
-      chin: categorySets.chin[0].title,
-      faceMain: categorySets.faceMain[0].title,
-      faceSub: categorySets.faceSub[0].title,
-    });
+    // setSelectedValues({
+    //   eyebrows: categorySets.eyebrows[0].title,
+    //   eyes: categorySets.eyes[0].title,
+    //   nose: categorySets.nose[0].title,
+    //   mouth: categorySets.mouth[0].title,
+    //   chin: categorySets.chin[0].title,
+    //   faceMain: categorySets.faceMain[0].title,
+    //   faceSub: categorySets.faceSub[0].title,
+    // });
     if (currentImageId === imagesData.length - 1) {
       showSwal({
         isSuccess: true,
-        title: `Congrats! Your score is ${imagesData.length}.`,
+        title: `Congrats! You have done all the tests!`,
+        // title: `Congrats! Your score is ${imagesData.length}.`,
       });
       navigate("/login");
     } else {
-      setCurrentImageId((prevIndex) => prevIndex + 1);
+      // setCurrentImageId((prevIndex) => prevIndex + 1);
+      const nextId = currentImageId + 1;
+      setCurrentImageId(nextId);
+
+      // 查詢資料庫有沒有下一張的紀錄
+      const username = localStorage.getItem("userName");
+      const userRecords = await getUserRecord();
+      const recordsForNextImage = userRecords.filter(
+        (record) =>
+          record.username === username &&
+          record.imageId === imagesData[nextId].imageId
+      );
+      if (recordsForNextImage.length > 0) {
+        // 取最後一筆
+        const lastRecord = recordsForNextImage[recordsForNextImage.length - 1];
+        setSelectedValues({
+          eyebrows: lastRecord.eyebrows,
+          eyes: lastRecord.eyes,
+          nose: lastRecord.nose,
+          mouth: lastRecord.mouth,
+          chin: lastRecord.chin,
+          faceMain: lastRecord.faceMain,
+          faceSub: lastRecord.faceSub,
+        });
+      } else {
+        // 沒有就用預設值
+        setSelectedValues({
+          eyebrows: categorySets.eyebrows[0].title,
+          eyes: categorySets.eyes[0].title,
+          nose: categorySets.nose[0].title,
+          mouth: categorySets.mouth[0].title,
+          chin: categorySets.chin[0].title,
+          faceMain: categorySets.faceMain[0].title,
+          faceSub: categorySets.faceSub[0].title,
+        });
+      }
+      setIsLoading(false);
     }
   };
 

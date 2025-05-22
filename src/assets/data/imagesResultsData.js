@@ -10,7 +10,7 @@ export const imagesResultsData = Object.keys(images)
     return numA - numB;
   })
   .map((key, index) => {
-    // console.log(key, index);
+    console.log(key, index);
     return {
       imageId: parseInt(key.match(/(\d+)\.jpg$/)[1], 10),
       imageUrl: key,
