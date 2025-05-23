@@ -1,4 +1,6 @@
-const images = import.meta.glob("@/assets/images/*.jpg", { eager: true });
+const images = import.meta.glob("@/assets/images/*.{jpg,JPG,Jpg}", {
+  eager: true,
+});
 // 將鍵值排序，確保按照數字順序排列
 export const imagesData = Object.keys(images)
   .sort((a, b) => {
