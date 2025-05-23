@@ -11504,10 +11504,17 @@ const resultsDataOri = {
 export const resultsData = Object.entries(resultsDataOri)
   .map(([key, value]) => {
     // console.log(key, value);
+    // 過濾掉 key 含「鼻」、「嘴」、「唇」的屬性
+    const filteredValue = Object.fromEntries(
+      Object.entries(value).filter(
+        ([k]) => !k.includes("鼻") && !k.includes("嘴") && !k.includes("唇")
+      )
+    );
+
     const match = key.match(/(\d+)\.npy$/);
     return {
       imageId: match ? parseInt(match[1], 10) : null,
-      value: value,
+      value: filteredValue,
     };
   })
   .sort((a, b) => a.imageId - b.imageId);

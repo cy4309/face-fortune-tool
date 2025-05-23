@@ -24,11 +24,12 @@ const groupByCategory = (features) => {
   //   else if (key.includes("嘴") || key.includes("唇"))
   //     grouped["嘴巴"][key] = value;
   //   else if (key.includes("下巴")) grouped["下巴"][key] = value;
-  //   // else grouped["其他"][key] = value;
+  //   else grouped["其他"][key] = value;
   // }
+  // return grouped;
 
   for (const [key, value] of Object.entries(features)) {
-    for (const [category, arr] of Object.entries(resultsSets)) {
+    for (const [, arr] of Object.entries(resultsSets)) {
       arr.forEach((item) => {
         if (item.options && item.options.some((opt) => opt.title === key)) {
           grouped[item.title][key] = value;
@@ -36,7 +37,6 @@ const groupByCategory = (features) => {
       });
     }
   }
-
   return grouped;
 };
 
@@ -48,18 +48,20 @@ const Results = () => {
     Object.keys(groupByCategory(resultsData[0]?.value || {}))
   );
   const [features, setFeatures] = useState(resultsData[0]?.value || {});
-  console.log(features);
+  // console.log(features);
+  // const [diffCount, setDiffCount] = useState({ changed: 0, total: 0 });
+  const [diffPercent, setDiffPercent] = useState(0);
   const grouped = groupByCategory(features);
 
-  useEffect(() => {
-    console.log("resultsData", resultsData);
-    console.log("imagesResultsData", imagesResultsData);
-  }, []);
+  // useEffect(() => {
+  //   console.log("resultsData", resultsData);
+  //   console.log("imagesResultsData", imagesResultsData);
+  // }, []);
 
   useEffect(() => {
     const username = localStorage.getItem("userName");
     getResultsRecord().then((data) => {
-      console.log(data);
+      // console.log(data);
       const userRecords = data.filter((record) => record.username === username);
       if (userRecords.length > 0) {
         // setCurrentImageId(data[data.length - 1].imageId);
@@ -68,6 +70,7 @@ const Results = () => {
           new Set(userRecords.map((record) => record.imageId))
         );
         setCurrentImageId(uniqueImageIds.length);
+        setFeatures(resultsData[uniqueImageIds.length]?.value || {});
 
         // 加上全部完成的判斷
         // if (data[data.length - 1].imageId === imagesData.length) {
@@ -85,6 +88,15 @@ const Results = () => {
       setIsLoading(false);
     });
   }, []);
+
+  const getDiffCount = (a, b) => {
+    let changed = 0;
+    const allKeys = new Set([...Object.keys(a), ...Object.keys(b)]);
+    allKeys.forEach((key) => {
+      if (a[key] !== b[key]) changed += 1;
+    });
+    return { changed, total: allKeys.size };
+  };
 
   // 轉換 features 的 key（中文）為英文 value
   const convertFeaturesKeysToValue = (features) => {
@@ -121,42 +133,106 @@ const Results = () => {
   };
 
   const handleSwitchChange = (category, key) => (checked) => {
-    setFeatures((prev) => ({
-      ...prev,
-      [key]: checked,
-    }));
+    setFeatures((prev) => {
+      const newFeatures = { ...prev, [key]: checked };
+      // 取得原本 features（中文 key）
+      const originalFeatures = resultsData[currentImageId]?.value || {};
+      // 計算差異
+      const diff = getDiffCount(newFeatures, originalFeatures);
+      // console.log(diff);
+      setDiffPercent(
+        Number(
+          diff.total > 0 ? ((diff.changed / diff.total) * 100).toFixed(1) : 0
+        )
+      );
+      return newFeatures;
+    });
+  };
+
+  // 英文 value 轉中文 title
+  const convertFeaturesKeysToTitle = (features) => {
+    const valueMap = {};
+    Object.values(resultsSets).forEach((arr) => {
+      arr.forEach((item) => {
+        if (item.options) {
+          item.options.forEach((opt) => {
+            valueMap[opt.value] = opt.title;
+          });
+        }
+      });
+    });
+
+    const result = {};
+    for (const [key, value] of Object.entries(features)) {
+      // 若有對應中文 title 就用中文，否則保留原本 key
+      result[valueMap[key] || key] = value;
+    }
+    return result;
   };
 
   const handlePrevImage = () => {
-    if (currentImageId > 0) {
-      setCurrentImageId((prev) => prev - 1);
-      // 展開全部
-      setActiveKeys(
-        Object.keys(
-          groupByCategory(resultsData[currentImageId - 1]?.value || {})
-        )
+    // if (currentImageId > 0) {
+    //   setCurrentImageId((prev) => prev - 1);
+    //   // 展開全部
+    //   setActiveKeys(
+    //     Object.keys(
+    //       groupByCategory(resultsData[currentImageId - 1]?.value || {})
+    //     )
+    //   );
+    // }
+    setIsLoading(true);
+    setCurrentImageId((prevIndex) =>
+      prevIndex === 0 ? imagesResultsData.length - 1 : prevIndex - 1
+    );
+
+    const username = localStorage.getItem("userName");
+    getResultsRecord().then((data) => {
+      // console.log(data);
+      const userRecords = data.filter((record) => record.username === username);
+
+      // 取得目前 currentImageId（已經 setCurrentImageId，但這裡還是舊值，所以要自己算）
+      const prevId =
+        currentImageId === 0
+          ? imagesResultsData.length - 1
+          : currentImageId - 1;
+
+      // 過濾出該 currentImageId 的所有紀錄
+      const recordsForImage = userRecords.filter(
+        (record) => record.imageId === imagesResultsData[prevId].imageId
       );
-    }
+
+      if (recordsForImage.length > 0) {
+        const lastRecord = recordsForImage[recordsForImage.length - 1];
+        // console.log(lastRecord);
+        setDiffPercent(lastRecord.diffPercent);
+        setFeatures(convertFeaturesKeysToTitle(lastRecord || {}));
+      }
+      setIsLoading(false);
+    });
   };
 
   const handleNextImage = async () => {
-    if (currentImageId < imagesResultsData.length - 1) {
+    setIsLoading(true);
+    if (currentImageId <= imagesResultsData.length - 1) {
       const convertedFeatures = convertFeaturesKeysToValue(features);
-      const userRecodeReq = {
+      const userRecordReq = {
         ...convertedFeatures,
         imageId: imagesResultsData[currentImageId].imageId,
         username: localStorage.getItem("userName"),
+        diffPercent: diffPercent,
         sheetName: "RESULTS",
       };
-      console.log(userRecodeReq);
+      // console.log(userRecordReq);
 
       try {
-        await postUserRecord(userRecodeReq);
+        await postUserRecord(userRecordReq);
       } catch (error) {
         console.error("送出紀錄失敗", error);
       }
 
-      if (currentImageId === imagesResultsData.length - 1) {
+      setDiffPercent(0);
+
+      if (currentImageId >= imagesResultsData.length - 1) {
         showSwal({
           isSuccess: true,
           title: `Congrats! You have done all the tests!`,
@@ -167,13 +243,33 @@ const Results = () => {
         // setCurrentImageId((prevIndex) => prevIndex + 1);
         const nextId = currentImageId + 1;
         setCurrentImageId(nextId);
-        setFeatures(resultsData[nextId]?.value || {});
+
+        // 查詢遠端資料庫有沒有下一張的資料
+        const username = localStorage.getItem("userName");
+        const data = await getResultsRecord();
+        const userRecords = data.filter(
+          (record) => record.username === username
+        );
+        const recordsForNextImage = userRecords.filter(
+          (record) => record.imageId === imagesResultsData[nextId].imageId
+        );
+
+        if (recordsForNextImage.length > 0) {
+          const lastRecord =
+            recordsForNextImage[recordsForNextImage.length - 1];
+          setDiffPercent(lastRecord.diffPercent);
+          setFeatures(convertFeaturesKeysToTitle(lastRecord || {}));
+        } else {
+          setFeatures(resultsData[nextId]?.value || {});
+        }
+
         // 展開全部
         setActiveKeys(
           Object.keys(groupByCategory(resultsData[nextId]?.value || {}))
         );
       }
     }
+    setIsLoading(false);
   };
 
   const collapseItems = Object.entries(grouped).map(([category, items]) => {
@@ -184,8 +280,8 @@ const Results = () => {
     let unknownLabel = "";
     if (category === "眉毛") unknownLabel = "眉毛無法辨識";
     else if (category === "眼睛") unknownLabel = "眼睛無法辨識";
-    else if (category === "鼻子") unknownLabel = "鼻子無法辨識";
-    else if (category === "嘴巴") unknownLabel = "嘴巴無法辨識";
+    // else if (category === "鼻子") unknownLabel = "鼻子無法辨識";
+    // else if (category === "嘴巴") unknownLabel = "嘴巴無法辨識";
     // else if (category === "下巴") unknownLabel = "下巴無法辨識";
     // else if (category === "五行臉主") unknownLabel = "五行臉主無法辨識";
     // else if (category === "五行臉輔") unknownLabel = "五行臉輔無法辨識";
@@ -236,6 +332,9 @@ const Results = () => {
         {imagesResultsData[currentImageId].sequenceId} /{" "}
         {imagesResultsData.length}
       </h2>
+      {/* <h2 className="w-[300px] flex justify-end text-sm text-gray-500">
+        更改率 {diffPercent}%
+      </h2> */}
       <div className="pb-4 w-[300px] h-[300px] overflow-hidden flex justify-center items-center">
         <img
           className="w-full h-full object-cover rounded-xl"

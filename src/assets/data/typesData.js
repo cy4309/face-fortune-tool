@@ -141,44 +141,44 @@ export const resultsSets = {
       ],
     },
   ],
-  nose: [
-    {
-      title: "鼻子",
-      options: [
-        { title: "鼻翼寬", value: "noseWide" },
-        { title: "鼻翼窄", value: "noseNarrow" },
-        { title: "鼻子無法辨識", value: "noseUncertain" },
-      ],
-    },
-  ],
-  mouth: [
-    {
-      title: "嘴巴",
-      options: [
-        { title: "嘴巴寬", value: "mouthWide" },
-        { title: "嘴巴窄", value: "mouthNarrow" },
-        { title: "厚唇", value: "mouthThick" },
-        { title: "薄唇", value: "mouthThin" },
-        { title: "嘴巴無法辨識", value: "mouthUncertain" },
-      ],
-    },
-  ],
-  chin: [
-    {
-      title: "下巴",
-      options: [],
-    },
-  ],
-  faceMain: [
-    {
-      title: "五行臉主",
-      options: [],
-    },
-  ],
-  faceSub: [
-    {
-      title: "五行臉輔",
-      options: [],
-    },
-  ],
+  // nose: [
+  //   {
+  //     title: "鼻子",
+  //     options: [
+  //       { title: "鼻翼寬", value: "noseWide" },
+  //       { title: "鼻翼窄", value: "noseNarrow" },
+  //       { title: "鼻子無法辨識", value: "noseUncertain" },
+  //     ],
+  //   },
+  // ],
+  // mouth: [
+  //   {
+  //     title: "嘴巴",
+  //     options: [
+  //       { title: "嘴巴寬", value: "mouthWide" },
+  //       { title: "嘴巴窄", value: "mouthNarrow" },
+  //       { title: "厚唇", value: "mouthThick" },
+  //       { title: "薄唇", value: "mouthThin" },
+  //       { title: "嘴巴無法辨識", value: "mouthUncertain" },
+  //     ],
+  //   },
+  // ],
+  // chin: [
+  //   {
+  //     title: "下巴",
+  //     options: [],
+  //   },
+  // ],
+  // faceMain: [
+  //   {
+  //     title: "五行臉主",
+  //     options: [],
+  //   },
+  // ],
+  // faceSub: [
+  //   {
+  //     title: "五行臉輔",
+  //     options: [],
+  //   },
+  // ],
 };

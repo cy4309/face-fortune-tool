@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import LoadingIndicator from "@/components/LoadingIndicator";
+import { imagesResultsData } from "@/assets/data/imagesResultsData";
 import { imagesData } from "@/assets/data/imagesData";
 import { categorySets } from "@/assets/data/typesData";
 import BaseButton from "@/components/BaseButton";
@@ -7,7 +8,11 @@ import { Select } from "antd";
 import { CaretRightOutlined } from "@ant-design/icons";
 import { showSwal } from "@/utils/notification";
 import { useNavigate } from "react-router-dom";
-import { getUserRecord, postUserRecord } from "@/services/formService";
+import {
+  getResultsRecord,
+  getUserRecord,
+  postUserRecord,
+} from "@/services/formService";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -15,7 +20,8 @@ const Home = () => {
   const [showMain, setShowMain] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentImageId, setCurrentImageId] = useState(0);
-  console.log(`currentImageId: ${currentImageId}`);
+  const [isTestsAllFinished, setIsTestsAllFinished] = useState(false);
+  const [isResultsAllFinished, setIsResultsAllFinished] = useState(false);
   // const [currentShowId, setCurrentShowId] = useState(0);
   const [selectedValues, setSelectedValues] = useState({
     eyebrows: categorySets.eyebrows[0].title,
@@ -48,9 +54,22 @@ const Home = () => {
   // }, []);
 
   useEffect(() => {
+    getResultsRecord().then((data) => {
+      const username = localStorage.getItem("userName");
+      const userRecords = data.filter((record) => record.username === username);
+      const uniqueImageIds = Array.from(
+        new Set(userRecords.map((record) => record.imageId))
+      );
+      setIsResultsAllFinished(
+        uniqueImageIds.length >= imagesResultsData.length
+      );
+    });
+  }, []);
+
+  useEffect(() => {
     const username = localStorage.getItem("userName");
     getUserRecord().then((data) => {
-      console.log(data);
+      // console.log(data);
       const userRecords = data.filter((record) => record.username === username);
       if (userRecords.length > 0) {
         // setCurrentImageId(data[data.length - 1].imageId);
@@ -59,19 +78,9 @@ const Home = () => {
           new Set(userRecords.map((record) => record.imageId))
         );
         setCurrentImageId(uniqueImageIds.length);
-
-        // 加上全部完成的判斷
-        // if (data[data.length - 1].imageId === imagesData.length) {
-        if (uniqueImageIds === imagesData.length) {
-          showSwal({
-            isSuccess: true,
-            title: `Congrats! You have done all the tests!`,
-            // title: `Your score is ${data[data.length - 1].imageId} / ${
-            //   imagesData.length
-            // }！`,
-          });
-          navigate("/login");
-        }
+        setIsTestsAllFinished(uniqueImageIds.length >= imagesData.length);
+      } else {
+        setIsTestsAllFinished(false);
       }
       setIsLoading(false);
     });
@@ -85,7 +94,7 @@ const Home = () => {
 
     const username = localStorage.getItem("userName");
     getUserRecord().then((data) => {
-      console.log(data);
+      // console.log(data);
       const userRecords = data.filter((record) => record.username === username);
 
       // 取得目前 currentImageId（已經 setCurrentImageId，但這裡還是舊值，所以要自己算）
@@ -129,14 +138,14 @@ const Home = () => {
       showSwal({ isSuccess: false, title: "Please select all options." });
       return;
     }
-    const userRecodeReq = {
+    const userRecordReq = {
       ...selectedValues,
       imageId: imagesData[currentImageId].imageId,
       username: localStorage.getItem("userName"),
     };
-    console.log(userRecodeReq);
-    await postUserRecord(userRecodeReq);
-    // postUserRecord(userRecodeReq).then((data) => {
+    // console.log(userRecordReq);
+    await postUserRecord(userRecordReq);
+    // postUserRecord(userRecordReq).then((data) => {
     //   console.log(data);
     // });
 
@@ -149,7 +158,7 @@ const Home = () => {
     //   faceMain: categorySets.faceMain[0].title,
     //   faceSub: categorySets.faceSub[0].title,
     // });
-    if (currentImageId === imagesData.length - 1) {
+    if (currentImageId >= imagesData.length - 1) {
       showSwal({
         isSuccess: true,
         title: `Congrats! You have done all the tests!`,
@@ -227,11 +236,17 @@ const Home = () => {
   if (!showMain) {
     return (
       <div className="w-full h-full space-y-6 mt-6 flex flex-col items-center justify-center">
-        <BaseButton onClick={() => setShowMain(true)}>
+        <BaseButton
+          onClick={() => setShowMain(true)}
+          disabled={isTestsAllFinished}
+        >
           開始測驗
           <CaretRightOutlined />
         </BaseButton>
-        <BaseButton onClick={() => navigate("/results")}>
+        <BaseButton
+          onClick={() => navigate("/results")}
+          disabled={isResultsAllFinished}
+        >
           看AI結果
           <CaretRightOutlined />
         </BaseButton>
