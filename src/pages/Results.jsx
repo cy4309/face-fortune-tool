@@ -54,7 +54,7 @@ const Results = () => {
         setFeatures(resultsData[uniqueImageIds.length]?.value || {});
 
         // 加上全部完成的判斷
-        if (uniqueImageIds === imagesResultsData.length) {
+        if (uniqueImageIds.length === imagesResultsData.length) {
           showSwal({
             isSuccess: true,
             title: `Congrats! You have done all the tests!`,
@@ -145,18 +145,17 @@ const Results = () => {
 
     const result = {};
     for (const [key, value] of Object.entries(features)) {
-      // 如果是註解類型，直接用 valueMap[key] 當 key，value 保持原樣
-      if (annotationKeys.has(key)) {
-        result[valueMap[key] || key] = value;
-      } else {
-        // 其他欄位，只有 boolean 才轉，非 boolean 不處理
-        result[valueMap[key] || key] = value;
+      // 如果是英文 key（即 opt.value）
+      if (valueMap[key]) {
+        // 判斷是否為註解
+        if (annotationKeys.has(key)) {
+          result[valueMap[key]] = value;
+        } else {
+          result[valueMap[key]] = value; // Boolean 預設情況
+        }
       }
-
-      // 如果是註解類型的中文 key，轉成英文 key
-      if (titleToValueMap[key]) {
-        result[titleToValueMap[key]] = value;
-      } else {
+      // 如果是中文 key，直接保留
+      else {
         result[key] = value;
       }
     }
