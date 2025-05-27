@@ -5,7 +5,7 @@ import { resultsData } from "@/assets/data/resultsData-20250520";
 import { imagesResultsData } from "@/assets/data/imagesResultsData";
 import { resultsSets } from "@/assets/data/typesData";
 import BaseButton from "@/components/BaseButton";
-import { Collapse, Switch, Typography } from "antd";
+import { Collapse, Switch, Typography, Input } from "antd";
 import { showSwal } from "@/utils/notification";
 import { getResultsRecord, postUserRecord } from "@/services/formService";
 
@@ -16,17 +16,6 @@ const groupByCategory = (features) => {
       grouped[item.title] = {};
     });
   });
-
-  // for (const [key, value] of Object.entries(features)) {
-  //   if (key.includes("眉")) grouped["眉毛"][key] = value;
-  //   else if (key.includes("眼")) grouped["眼睛"][key] = value;
-  //   else if (key.includes("鼻")) grouped["鼻子"][key] = value;
-  //   else if (key.includes("嘴") || key.includes("唇"))
-  //     grouped["嘴巴"][key] = value;
-  //   else if (key.includes("下巴")) grouped["下巴"][key] = value;
-  //   else grouped["其他"][key] = value;
-  // }
-  // return grouped;
 
   for (const [key, value] of Object.entries(features)) {
     for (const [, arr] of Object.entries(resultsSets)) {
@@ -41,7 +30,6 @@ const groupByCategory = (features) => {
 };
 
 const Results = () => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [currentImageId, setCurrentImageId] = useState(0);
   const [activeKeys, setActiveKeys] = useState(
@@ -49,22 +37,15 @@ const Results = () => {
   );
   const [features, setFeatures] = useState(resultsData[0]?.value || {});
   // console.log(features);
-  // const [diffCount, setDiffCount] = useState({ changed: 0, total: 0 });
   const [diffPercent, setDiffPercent] = useState(0);
+  const navigate = useNavigate();
   const grouped = groupByCategory(features);
-
-  // useEffect(() => {
-  //   console.log("resultsData", resultsData);
-  //   console.log("imagesResultsData", imagesResultsData);
-  // }, []);
 
   useEffect(() => {
     const username = localStorage.getItem("userName");
     getResultsRecord().then((data) => {
-      // console.log(data);
       const userRecords = data.filter((record) => record.username === username);
       if (userRecords.length > 0) {
-        // setCurrentImageId(data[data.length - 1].imageId);
         // 取得所有不同的 imageId
         const uniqueImageIds = Array.from(
           new Set(userRecords.map((record) => record.imageId))
@@ -73,14 +54,10 @@ const Results = () => {
         setFeatures(resultsData[uniqueImageIds.length]?.value || {});
 
         // 加上全部完成的判斷
-        // if (data[data.length - 1].imageId === imagesData.length) {
         if (uniqueImageIds === imagesResultsData.length) {
           showSwal({
             isSuccess: true,
             title: `Congrats! You have done all the tests!`,
-            // title: `Your score is ${data[data.length - 1].imageId} / ${
-            //   imagesData.length
-            // }！`,
           });
           navigate("/login");
         }
@@ -108,7 +85,6 @@ const Results = () => {
         if (item.options) {
           item.options.forEach((opt) => {
             keyMap[opt.title] = opt.value;
-            // 收集所有 uncertain 的英文 key
             if (opt.value && opt.value.toLowerCase().includes("uncertain")) {
               allUncertain.push(opt.value);
             }
@@ -137,9 +113,7 @@ const Results = () => {
       const newFeatures = { ...prev, [key]: checked };
       // 取得原本 features（中文 key）
       const originalFeatures = resultsData[currentImageId]?.value || {};
-      // 計算差異
       const diff = getDiffCount(newFeatures, originalFeatures);
-      // console.log(diff);
       setDiffPercent(
         Number(
           diff.total > 0 ? ((diff.changed / diff.total) * 100).toFixed(1) : 0
@@ -152,11 +126,18 @@ const Results = () => {
   // 英文 value 轉中文 title
   const convertFeaturesKeysToTitle = (features) => {
     const valueMap = {};
+    const titleToValueMap = {};
+    const annotationKeys = new Set();
+
     Object.values(resultsSets).forEach((arr) => {
       arr.forEach((item) => {
         if (item.options) {
           item.options.forEach((opt) => {
             valueMap[opt.value] = opt.title;
+            titleToValueMap[opt.title] = opt.value;
+            if (opt.title.includes("註解")) {
+              annotationKeys.add(opt.value);
+            }
           });
         }
       });
@@ -164,22 +145,25 @@ const Results = () => {
 
     const result = {};
     for (const [key, value] of Object.entries(features)) {
-      // 若有對應中文 title 就用中文，否則保留原本 key
-      result[valueMap[key] || key] = value;
+      // 如果是註解類型，直接用 valueMap[key] 當 key，value 保持原樣
+      if (annotationKeys.has(key)) {
+        result[valueMap[key] || key] = value;
+      } else {
+        // 其他欄位，只有 boolean 才轉，非 boolean 不處理
+        result[valueMap[key] || key] = value;
+      }
+
+      // 如果是註解類型的中文 key，轉成英文 key
+      if (titleToValueMap[key]) {
+        result[titleToValueMap[key]] = value;
+      } else {
+        result[key] = value;
+      }
     }
     return result;
   };
 
   const handlePrevImage = () => {
-    // if (currentImageId > 0) {
-    //   setCurrentImageId((prev) => prev - 1);
-    //   // 展開全部
-    //   setActiveKeys(
-    //     Object.keys(
-    //       groupByCategory(resultsData[currentImageId - 1]?.value || {})
-    //     )
-    //   );
-    // }
     setIsLoading(true);
     setCurrentImageId((prevIndex) =>
       prevIndex === 0 ? imagesResultsData.length - 1 : prevIndex - 1
@@ -187,7 +171,6 @@ const Results = () => {
 
     const username = localStorage.getItem("userName");
     getResultsRecord().then((data) => {
-      // console.log(data);
       const userRecords = data.filter((record) => record.username === username);
 
       // 取得目前 currentImageId（已經 setCurrentImageId，但這裡還是舊值，所以要自己算）
@@ -240,7 +223,6 @@ const Results = () => {
         navigate("/login");
       } else {
         // 切換到下一張時，重設 features 為下一筆資料
-        // setCurrentImageId((prevIndex) => prevIndex + 1);
         const nextId = currentImageId + 1;
         setCurrentImageId(nextId);
 
@@ -277,47 +259,79 @@ const Results = () => {
     const entries = Object.entries(items);
 
     // 定義每個分類的「無法辨識」key
-    let unknownLabel = "";
-    if (category === "眉毛") unknownLabel = "眉毛無法辨識";
-    else if (category === "眼睛") unknownLabel = "眼睛無法辨識";
+    // let unknownLabel = "";
+    // if (category === "眉毛") unknownLabel = "眉毛無法辨識";
+    // else if (category === "眼睛") unknownLabel = "眼睛無法辨識";
     // else if (category === "鼻子") unknownLabel = "鼻子無法辨識";
     // else if (category === "嘴巴") unknownLabel = "嘴巴無法辨識";
     // else if (category === "下巴") unknownLabel = "下巴無法辨識";
     // else if (category === "五行臉主") unknownLabel = "五行臉主無法辨識";
     // else if (category === "五行臉輔") unknownLabel = "五行臉輔無法辨識";
-
     // 只在 entries 裡沒有這個 key 時才 push
-    if (unknownLabel && !entries.some(([key]) => key === unknownLabel)) {
-      entries.push([unknownLabel, features[unknownLabel] || false]);
+    // if (unknownLabel && !entries.some(([key]) => key === unknownLabel)) {
+    //   entries.push([unknownLabel, features[unknownLabel] || false]);
+    // }
+
+    // 取得該分類的註解選項
+    let annotationOption;
+    for (const arr of Object.values(resultsSets)) {
+      for (const item of arr) {
+        if (item.title === category && item.options) {
+          annotationOption = item.options.find((opt) =>
+            opt.title.includes("註解")
+          );
+        }
+      }
     }
 
     return {
       key: category,
       label: category,
       children: (
-        <>
-          {/* {Object.entries(items).map(([key, value]) => ( */}
-          {entries.map(([key, value]) => (
-            <div
-              key={key}
-              className="p-8 w-1/2 h-12 flex justify-between items-center"
-            >
-              <Typography.Text>{key}</Typography.Text>
-              <Switch
-                checked={value}
-                onChange={
-                  key.endsWith("無法辨識")
-                    ? (checked) =>
-                        setFeatures((prev) => ({
-                          ...prev,
-                          [key]: checked,
-                        }))
-                    : handleSwitchChange(category, key)
+        <div className="flex flex-wrap">
+          {entries
+            .filter(
+              ([key]) =>
+                !key.includes("註解") &&
+                !key.toLowerCase().includes("annotation")
+            )
+            .map(([key, value]) => (
+              <div
+                key={key}
+                className="p-8 h-12 w-1/2 flex justify-between items-center"
+              >
+                <Typography.Text>{key}</Typography.Text>
+                <Switch
+                  checked={value}
+                  onChange={handleSwitchChange(category, key)}
+                  // onChange={
+                  //   key.endsWith("無法辨識")
+                  //     ? (checked) =>
+                  //         setFeatures((prev) => ({
+                  //           ...prev,
+                  //           [key]: checked,
+                  //         }))
+                  //     : handleSwitchChange(category, key)
+                  // }
+                />
+              </div>
+            ))}
+          {annotationOption && (
+            <div className="p-8 h-12 w-full flex justify-between items-center">
+              <Input
+                placeholder={`請輸入${annotationOption.title}`}
+                value={features[annotationOption.value] || ""}
+                onChange={(e) =>
+                  setFeatures((prev) => ({
+                    ...prev,
+                    [annotationOption.value]: e.target.value,
+                  }))
                 }
+                size="middle"
               />
             </div>
-          ))}
-        </>
+          )}
+        </div>
       ),
     };
   });

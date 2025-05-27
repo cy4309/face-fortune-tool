@@ -1,4 +1,4 @@
-const images = import.meta.glob("@/assets/images-test/*.{jpg,JPG,Jpg}", {
+const images = import.meta.glob("@/assets/images-tests/*.{jpg,JPG,Jpg}", {
   eager: true,
 });
 // 將鍵值排序，確保按照數字順序排列
