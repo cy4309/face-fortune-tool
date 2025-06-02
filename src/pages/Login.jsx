@@ -13,11 +13,14 @@ const Login = () => {
 
   return (
     <>
-      <div className="absolute inset-0 flex flex-col justify-center items-center space-y-4">
-        <BaseButton className="w-2/3" onClick={() => handleLogin("YoungChien")}>
+      <div className="space-y-4 p-4 w-full min-h-[80vh] flex flex-col justify-center items-center">
+        <BaseButton
+          className="w-full"
+          onClick={() => handleLogin("YoungChien")}
+        >
           簡少年登入
         </BaseButton>
-        <BaseButton className="w-2/3" onClick={() => handleLogin("Admin")}>
+        <BaseButton className="w-full" onClick={() => handleLogin("Admin")}>
           後台登入
         </BaseButton>
       </div>

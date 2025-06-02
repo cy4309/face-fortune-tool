@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { toggleDarkMode } from "@/stores/features/styleSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SunOutlined, CaretLeftOutlined } from "@ant-design/icons";
-// import Login from "@/containers/Login";
 // import { showSwal } from "@/utils/notification";
 
 const Nav = () => {

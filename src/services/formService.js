@@ -1,7 +1,5 @@
 import axios from "axios";
 const gasUrl =
-  // "https://script.google.com/macros/s/AKfycbwGhc2ZpsXepU-_fwuaockl37ikKexIaWgypxQ7lVzPC5uLEnUVhMpDjC6CRwk1YpJ5/exec"; // v14
-  // "https://script.google.com/macros/s/AKfycbwkdpYaYtvOv4Z5Xenb8Q30zHnaQdc1sLNpCarurXI5rJ6hLlV362cWaqJCuQybK4TJ/exec"; // v15
   "https://script.google.com/macros/s/AKfycbwF3nCA2RexrBvF8jetwQpg4zLrs0v78huCwcwhH3-FkzvKuXLIN6mwiZF36sMXGm-c/exec"; // v21
 
 export const getUserRecord = async () => {
