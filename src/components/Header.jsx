@@ -2,8 +2,7 @@ import BaseButton from "@/components/BaseButton";
 import { useDispatch } from "react-redux";
 import { toggleDarkMode } from "@/stores/features/styleSlice";
 import { useNavigate, useLocation } from "react-router-dom";
-import { SunOutlined } from "@ant-design/icons";
-import { CaretLeftOutlined } from "@ant-design/icons";
+import { SunOutlined, CaretLeftOutlined } from "@ant-design/icons";
 // import Login from "@/containers/Login";
 // import { showSwal } from "@/utils/notification";
 
@@ -59,7 +58,7 @@ const Nav = () => {
         <h1>Face Fortune Tool</h1>
       </div> */}
       <div className="flex justify-center items-center">
-        <p className="text-sm mr-4 flex items-center">V0.1.2</p>
+        <p className="text-sm mr-4 flex items-center">V0.1.3</p>
         <BaseButton
           className="h-10 cursor-pointer hover:bg-hoverGray"
           // onClick={() => dispatch(toggleDarkMode())}

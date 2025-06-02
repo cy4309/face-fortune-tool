@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import { resultsData } from "@/assets/data/resultsData-20250520";
 import { imagesResultsData } from "@/assets/data/imagesResultsData";
+import { imagesLandmarksData } from "@/assets/data/imagesLandmarksData";
 import { resultsSets } from "@/assets/data/typesData";
 import BaseButton from "@/components/BaseButton";
 import { Collapse, Switch, Typography, Input } from "antd";
+import { SwapOutlined } from "@ant-design/icons";
 import { showSwal } from "@/utils/notification";
 import { getResultsRecord, postUserRecord } from "@/services/formService";
 
@@ -20,7 +22,7 @@ const groupByCategory = (features) => {
   for (const [key, value] of Object.entries(features)) {
     for (const [, arr] of Object.entries(resultsSets)) {
       arr.forEach((item) => {
-        if (item.options && item.options.some((opt) => opt.title === key)) {
+        if (item.options && item.options.some((opt) => opt.value === key)) {
           grouped[item.title][key] = value;
         }
       });
@@ -38,8 +40,10 @@ const Results = () => {
   const [features, setFeatures] = useState(resultsData[0]?.value || {});
   // console.log(features);
   const [diffPercent, setDiffPercent] = useState(0);
+  const [isShowLandmarks, setIsShowLandmarks] = useState(false);
   const navigate = useNavigate();
   const grouped = groupByCategory(features);
+  // console.log(grouped);
 
   useEffect(() => {
     const username = localStorage.getItem("userName");
@@ -75,39 +79,6 @@ const Results = () => {
     return { changed, total: allKeys.size };
   };
 
-  // 轉換 features 的 key（中文）為英文 value
-  const convertFeaturesKeysToValue = (features) => {
-    const keyMap = {};
-    const allUncertain = [];
-
-    Object.values(resultsSets).forEach((arr) => {
-      arr.forEach((item) => {
-        if (item.options) {
-          item.options.forEach((opt) => {
-            keyMap[opt.title] = opt.value;
-            if (opt.value && opt.value.toLowerCase().includes("uncertain")) {
-              allUncertain.push(opt.value);
-            }
-          });
-        }
-      });
-    });
-
-    const result = {};
-    for (const [key, value] of Object.entries(features)) {
-      // 若有對應英文 value 就用英文，否則保留原本 key
-      result[keyMap[key] || key] = value;
-    }
-    // 再補上所有未出現或非 true 的 uncertain，設為 false
-    allUncertain.forEach((uncertainKey) => {
-      if (result[uncertainKey] !== true) {
-        result[uncertainKey] = false;
-      }
-    });
-
-    return result;
-  };
-
   const handleSwitchChange = (category, key) => (checked) => {
     setFeatures((prev) => {
       const newFeatures = { ...prev, [key]: checked };
@@ -121,45 +92,6 @@ const Results = () => {
       );
       return newFeatures;
     });
-  };
-
-  // 英文 value 轉中文 title
-  const convertFeaturesKeysToTitle = (features) => {
-    const valueMap = {};
-    const titleToValueMap = {};
-    const annotationKeys = new Set();
-
-    Object.values(resultsSets).forEach((arr) => {
-      arr.forEach((item) => {
-        if (item.options) {
-          item.options.forEach((opt) => {
-            valueMap[opt.value] = opt.title;
-            titleToValueMap[opt.title] = opt.value;
-            if (opt.title.includes("註解")) {
-              annotationKeys.add(opt.value);
-            }
-          });
-        }
-      });
-    });
-
-    const result = {};
-    for (const [key, value] of Object.entries(features)) {
-      // 如果是英文 key（即 opt.value）
-      if (valueMap[key]) {
-        // 判斷是否為註解
-        if (annotationKeys.has(key)) {
-          result[valueMap[key]] = value;
-        } else {
-          result[valueMap[key]] = value; // Boolean 預設情況
-        }
-      }
-      // 如果是中文 key，直接保留
-      else {
-        result[key] = value;
-      }
-    }
-    return result;
   };
 
   const handlePrevImage = () => {
@@ -185,9 +117,9 @@ const Results = () => {
 
       if (recordsForImage.length > 0) {
         const lastRecord = recordsForImage[recordsForImage.length - 1];
-        // console.log(lastRecord);
+        console.log(lastRecord);
         setDiffPercent(lastRecord.diffPercent);
-        setFeatures(convertFeaturesKeysToTitle(lastRecord || {}));
+        setFeatures(lastRecord || {});
       }
       setIsLoading(false);
     });
@@ -196,9 +128,8 @@ const Results = () => {
   const handleNextImage = async () => {
     setIsLoading(true);
     if (currentImageId <= imagesResultsData.length - 1) {
-      const convertedFeatures = convertFeaturesKeysToValue(features);
       const userRecordReq = {
-        ...convertedFeatures,
+        ...features,
         imageId: imagesResultsData[currentImageId].imageId,
         username: localStorage.getItem("userName"),
         diffPercent: diffPercent,
@@ -239,7 +170,7 @@ const Results = () => {
           const lastRecord =
             recordsForNextImage[recordsForNextImage.length - 1];
           setDiffPercent(lastRecord.diffPercent);
-          setFeatures(convertFeaturesKeysToTitle(lastRecord || {}));
+          setFeatures(lastRecord || {});
         } else {
           setFeatures(resultsData[nextId]?.value || {});
         }
@@ -283,6 +214,18 @@ const Results = () => {
       }
     }
 
+    // 建立英中對照表(僅顯示用)
+    const valueToTitleMap = {};
+    Object.values(resultsSets).forEach((arr) => {
+      arr.forEach((item) => {
+        if (item.options) {
+          item.options.forEach((opt) => {
+            valueToTitleMap[opt.value] = opt.title;
+          });
+        }
+      });
+    });
+
     return {
       key: category,
       label: category,
@@ -299,7 +242,7 @@ const Results = () => {
                 key={key}
                 className="p-8 h-12 w-1/2 flex justify-between items-center"
               >
-                <Typography.Text>{key}</Typography.Text>
+                <Typography.Text>{valueToTitleMap[key] || key}</Typography.Text>
                 <Switch
                   checked={value}
                   onChange={handleSwitchChange(category, key)}
@@ -341,21 +284,43 @@ const Results = () => {
 
   return (
     <>
-      <h2 className="w-[300px] flex justify-end">
-        {imagesResultsData[currentImageId].sequenceId} /{" "}
-        {imagesResultsData.length}
-      </h2>
-      {/* <h2 className="w-[300px] flex justify-end text-sm text-gray-500">
-        更改率 {diffPercent}%
-      </h2> */}
+      <div className="space-x-4 p-4 w-full flex items-center justify-end">
+        <h2>
+          {imagesResultsData[currentImageId].sequenceId} /{" "}
+          {imagesResultsData.length}
+        </h2>
+        {/* <h2 className="w-[300px] flex justify-end text-sm text-gray-500">
+          更改率 {diffPercent}%
+        </h2> */}
+        <BaseButton onClick={() => setIsShowLandmarks((prev) => !prev)}>
+          <SwapOutlined />
+        </BaseButton>
+      </div>
       <div className="pb-4 w-[300px] h-[300px] overflow-hidden flex justify-center items-center">
+        {!isShowLandmarks ? (
+          <img
+            className="w-full h-full object-cover rounded-xl"
+            key={imagesResultsData[currentImageId].sequenceId}
+            src={imagesResultsData[currentImageId].imageUrl}
+            alt="image"
+          />
+        ) : (
+          <img
+            className="w-full h-full object-cover rounded-xl"
+            key={imagesLandmarksData[currentImageId].sequenceId}
+            src={imagesLandmarksData[currentImageId].imageUrl}
+            alt="image"
+          />
+        )}
+      </div>
+      {/* <div className="pb-4 w-[300px] h-[300px] overflow-hidden flex justify-center items-center">
         <img
           className="w-full h-full object-cover rounded-xl"
-          key={imagesResultsData[currentImageId].sequenceId}
-          src={imagesResultsData[currentImageId].imageUrl}
+          key={imagesLandmarksData[currentImageId].sequenceId}
+          src={imagesLandmarksData[currentImageId].imageUrl}
           alt="image"
         />
-      </div>
+      </div> */}
       {resultsData && (
         <Collapse
           items={collapseItems}
