@@ -226,38 +226,70 @@ const Results = () => {
       });
     });
 
+    // 兩兩一組分組
+    const filteredEntries = entries.filter(
+      ([key]) =>
+        !key.includes("註解") && !key.toLowerCase().includes("annotation")
+    );
+    const specialKeys = [
+      "browsLong",
+      "browsShort",
+      "browsPressEyes",
+      "eyesDroopInner",
+      "eyesRoundInner",
+    ];
+    const pairs = [];
+    let temp = [];
+
+    filteredEntries.forEach(([key, value]) => {
+      if (specialKeys.includes(key)) {
+        // 這三個 key 各自一組
+        pairs.push([[key, value]]);
+      } else {
+        temp.push([key, value]);
+        if (temp.length === 2) {
+          pairs.push([...temp]);
+          temp = [];
+        }
+      }
+    });
+    // 若 temp 還有剩，補進 pairs
+    if (temp.length > 0) {
+      pairs.push([...temp]);
+    }
+
     return {
       key: category,
       label: category,
       children: (
         <div className="flex flex-wrap">
-          {entries
-            .filter(
-              ([key]) =>
-                !key.includes("註解") &&
-                !key.toLowerCase().includes("annotation")
-            )
-            .map(([key, value]) => (
-              <div
-                key={key}
-                className="p-8 h-12 w-1/2 flex justify-between items-center"
-              >
-                <Typography.Text>{valueToTitleMap[key] || key}</Typography.Text>
-                <Switch
-                  checked={value}
-                  onChange={handleSwitchChange(category, key)}
-                  // onChange={
-                  //   key.endsWith("無法辨識")
-                  //     ? (checked) =>
-                  //         setFeatures((prev) => ({
-                  //           ...prev,
-                  //           [key]: checked,
-                  //         }))
-                  //     : handleSwitchChange(category, key)
-                  // }
-                />
-              </div>
-            ))}
+          {pairs.map((pair, idx) => (
+            <div key={idx} className="flex w-full mb-2 border rounded-lg">
+              {pair.map(([key, value]) => (
+                <div
+                  key={key}
+                  className="p-8 h-12 w-1/2 flex justify-between items-center"
+                >
+                  <Typography.Text>
+                    {valueToTitleMap[key] || key}
+                  </Typography.Text>
+                  <Switch
+                    checked={value}
+                    onChange={handleSwitchChange(category, key)}
+                    // onChange={
+                    //   key.endsWith("無法辨識")
+                    //     ? (checked) =>
+                    //         setFeatures((prev) => ({
+                    //           ...prev,
+                    //           [key]: checked,
+                    //         }))
+                    //     : handleSwitchChange(category, key)
+                    // }
+                  />
+                </div>
+              ))}
+            </div>
+          ))}
           {annotationOption && (
             <div className="p-8 h-12 w-full flex justify-between items-center">
               <Input
