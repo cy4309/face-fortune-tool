@@ -57,7 +57,7 @@ const Nav = () => {
         <h1>Face Fortune Tool</h1>
       </div> */}
       <div className="flex justify-center items-center">
-        <p className="text-sm mr-4 flex items-center">V0.1.3</p>
+        <p className="text-sm mr-4 flex items-center">V0.1.4</p>
         <BaseButton
           className="h-10 cursor-pointer hover:bg-hoverGray"
           // onClick={() => dispatch(toggleDarkMode())}

@@ -1,4 +1,4 @@
-// Get-ChildItem *.png | Rename-Item -NewName { $_.Name.ToLower() } terminal執行檔名全小寫
+// Get-ChildItem *.png | Rename-Item -NewName { $_.Name.ToLower() } //PowerShell執行檔名全小寫
 
 const images = import.meta.glob(
   "@/assets/images-landmarks/*.{jpg,JPG,Jpg,png}",

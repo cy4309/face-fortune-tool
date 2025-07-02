@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingIndicator from "@/components/LoadingIndicator";
-import { resultsData } from "@/assets/data/resultsData-20250520";
+// import { resultsData } from "@/assets/data/resultsData-20250520";
+import { resultsData } from "@/assets/data/resultsData-20250702";
 import { imagesResultsData } from "@/assets/data/imagesResultsData";
 import { imagesLandmarksData } from "@/assets/data/imagesLandmarksData";
 import { resultsSets } from "@/assets/data/typesData";
